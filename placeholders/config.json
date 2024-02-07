@@ -1,0 +1,26 @@
+{
+    "client_credentials":
+    {
+        "description":
+        [
+            "Replace placeholders with the 'Client Credentials' (client_id, client_secret) that will be used by Sinch in the OAuth",
+            "flow; they are arbitrary strings, but they have to match those you configured as 'FCM OAuth Configuration'",
+            "in Sinch Dashboard. You can check your Sinch's app configuration at https://dashboard.sinch.com/voice/apps"
+        ],
+        "client_id": "<PLACEHOLDER>",
+        "client_secret": "<PLACEHOLDER>"
+    },
+    "fcm_config":
+    {
+        "description":
+        [
+            "Replace placeholders with the 'Project number' of your Android app's FCM project.",
+            "It's needed to validate the 'fcm_project_number' field in your FCM token endpoint.",
+            "You can find the 'Project number' for your FCM project at:",
+            "https://console.firebase.google.com/u/0/project/<your-fcm-project-id>/settings/general",
+            "NB: 'Project number' != 'Project ID"
+        ],
+        "expected_fcm_project_number": "<PLACEHOLDER>"
+    }
+
+}
