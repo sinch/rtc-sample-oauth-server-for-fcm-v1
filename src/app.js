@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true, parameterLimit: 10 }))
 
 // Reject any Content-type other than application/x-www-form-urlencoded.
 app.use((req, res, next) => {
-  if (!req.is(URL_ENCODED_CONTENT_TYPE)) {
+  if (!req.is(URL_ENCODED_CONTENT_TYPE) && req.url !== '/ping') {
     res.status(400).json('Unsupported Content-type').send()
   } else {
     next()
@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 
 // Log requests and responses to console.
 app.use((req, res, next) => {
-  console.log(`Request: ${req.method} ${JSON.stringify(req.body)}`)
+  console.log(`Request (${req.url}): ${req.method} ${JSON.stringify(req.body)}`)
   const send = res.send
   res.send = r => {
     console.log(`Response: ${res.statusCode} ${r}`)
@@ -47,6 +47,10 @@ app.use((req, res, next) => {
 /*
  * Authorization endpoint
 */
+
+app.get('/ping', function (req, resp) {
+    return resp.status(200).json('Service is up and running').send()
+})
 
 app.post('/oauth/token', function (req, resp) {
   const clientId = req.body.client_id
