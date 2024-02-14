@@ -17,14 +17,14 @@ lint:
   script:
     - npm run lint
 
-test:
+api:test:
   stage: test
   tags: [rtc]
   script:
     - npm run test
 
-test_placeholders:
+placeholders:test:
   stage: test
   tags: [rtc]
   script:
-    - ./verify-termination-on-placeholders.sh
+    - bash -x ./verify-termination-on-placeholders.sh
