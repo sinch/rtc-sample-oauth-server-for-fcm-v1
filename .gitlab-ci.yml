@@ -13,18 +13,18 @@ before_script:
 
 lint:
   stage: lint
-  tags: rtc
+  tags: [rtc]
   script:
     - npm run lint
 
 test:
   stage: test
-  tags: rtc
+  tags: [rtc]
   script:
     - npm run test
 
 test_placeholders:
   stage: test
-  tags: rtc
+  tags: [rtc]
   script:
     - ./verify-termination-on-placeholders.sh
