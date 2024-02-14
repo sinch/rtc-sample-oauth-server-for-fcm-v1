@@ -49,7 +49,7 @@ app.use((req, res, next) => {
 */
 
 app.get('/ping', function (req, resp) {
-    return resp.status(200).json('Service is up and running').send()
+  return resp.status(200).json('Service is up and running').send()
 })
 
 app.post('/oauth/token', function (req, resp) {
