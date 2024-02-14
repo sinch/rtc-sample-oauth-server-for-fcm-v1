@@ -11,7 +11,7 @@ cache:
 before_script:
   - npm install
 
-test:
+lint:
   stage: lint
   script:
     - npm run lint
