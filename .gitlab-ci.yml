@@ -20,3 +20,8 @@ test:
   stage: test
   script:
     - npm run test
+
+test_placeholders:
+  stage: test
+  script:
+    - ./verify-termination-on-placeholders.sh
