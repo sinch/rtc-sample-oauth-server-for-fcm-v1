@@ -12,7 +12,7 @@ _fail_if_command_unavailable() {
 function _ensure_service_up()
 {
     local url="http://localhost:1000/ping"
-    local timeout_s=10
+    local timeout_s=30
     local end_at_s=$(( $(date +%s) + $timeout_s ))
 
     while [ $(date +%s) -lt $end_at_s ]; do
