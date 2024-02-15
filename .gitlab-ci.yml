@@ -29,7 +29,7 @@ api:test:
 placeholders:test:
   stage: test
   script:
-    - ./verify-termination-on-placeholders.sh
+    - bash -x verify-termination-on-placeholders.sh
 
 docker:endpoints:test:
   stage: test
