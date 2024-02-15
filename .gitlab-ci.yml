@@ -1,4 +1,3 @@
-image: node:21-alpine
 
 stages:
   # - lint
@@ -14,25 +13,28 @@ before_script:
 
 # lint:
 #   stage: lint
+#   image: node:21-alpine
 #   tags: [rtc]
 #   script:
 #     - npm run lint
 
 api:test:
   stage: test
+  image: node:21-alpine
   tags: [rtc]
   script:
     - npm run test
 
 placeholders:test:
   stage: test
+  image: node:21-alpine
   tags: [rtc]
   script:
     - ./verify-termination-on-placeholders.sh
 
-endpoints:test:
+docker:endpoints:test:
   stage: test
-  tags: [docker+machine]
+  tags: [rtc-dind]
   script:
     - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
     - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
