@@ -10,6 +10,7 @@ cache:
 
 before_script:
   - npm install
+  - apk add bash curl jq
 
 # lint:
 #   stage: lint
