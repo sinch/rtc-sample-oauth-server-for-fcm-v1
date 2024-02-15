@@ -1,3 +1,8 @@
+include:
+  - project: "sinch/sinch-projects/voice/gitlab-pipelines"
+    ref: main
+    file: "/jobs/_jobs.yml"
+
 stages:
   # - lint
   - test
@@ -28,15 +33,14 @@ api:test:
 
 placeholders:test:
   stage: test
+  extends: .node
   script:
     - bash -x verify-termination-on-placeholders.sh
 
 docker:endpoints:test:
   stage: test
-  tags: [rtc-dind]
+  extends: .kaniko
   script:
     - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
     - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
-    - docker compose up --build --detach
-    - ./test-endpoints-locally.sh
-    - docker compose down
+    - !reference [.kaniko, script]
