@@ -16,6 +16,7 @@ function _ensure_service_up()
     local end_at_s=$(( $(date +%s) + $timeout_s ))
 
     while [ $(date +%s) -lt $end_at_s ]; do
+        echo "Trying to contact the authorization server..."
         local status_code="$(curl -s -o /dev/null -w '%{http_code}' "$url")"
         if [ "$status_code" == '200' ]; then
             return 0
@@ -31,6 +32,8 @@ _fail_if_command_unavailable "jq"
 _fail_if_command_unavailable "curl"
 
 _ensure_service_up
+
+echo "Starting test, will try to contact the authorization server for max 30s..."
 
 CLIENT_ID=$(jq -r '.client_credentials.client_id' placeholders/config.json)
 CLIENT_SECRET=$(jq -r '.client_credentials.client_secret' placeholders/config.json)
@@ -52,4 +55,4 @@ FCM_TOKEN=$(curl -s --request POST \
   --data "fcm_project_number=$FCM_PROJECT_NUMBER" \
   --data grant_type=client_credentials | jq -r '.access_token')
 
-echo "Successfully fetched FCM token: $FCM_TOKEN"
+echo "Successfully fetched FCM token ($FCM_TOKEN)"

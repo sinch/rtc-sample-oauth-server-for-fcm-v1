@@ -4,8 +4,9 @@
         "description":
         [
             "Replace placeholders with the 'Client Credentials' (client_id, client_secret) that will be used by Sinch in the OAuth",
-            "flow; they are arbitrary strings, but they have to match those you configured as 'FCM OAuth Configuration'",
-            "in Sinch Dashboard. You can check your Sinch's app configuration at https://dashboard.sinch.com/voice/apps"
+            "flow; they are arbitrary strings, but they have to match the credentials you configured (or will configure)",
+            "as 'FCM OAuth Configuration' in Sinch Dashboard.",
+            "You can check your Sinch's app configuration at https://dashboard.sinch.com/voice/apps"
         ],
         "client_id": "<PLACEHOLDER>",
         "client_secret": "<PLACEHOLDER>"
