@@ -24,7 +24,7 @@ function _ensure_service_up()
         sleep 1
     done
 
-    _print_stderr "Failed to receive HTTP 200 OK"
+    echo "Failed to receive HTTP 200 OK"
     exit 1
 }
 
