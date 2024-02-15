@@ -32,7 +32,7 @@ placeholders:test:
 
 endpoints:test:
   stage: test
-  tags: [rtc]
+  tags: [rtc, docker+machine]
   script:
     - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
     - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
