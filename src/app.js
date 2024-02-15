@@ -1,6 +1,8 @@
 const express = require('express')
 const fcmTokenFactory = require('./fcmTokenFactory')
 
+const FCM_TOKEN_TTL_SECONDS_OVERRIDE = null
+
 const SCOPE = 'https://www.googleapis.com/auth/firebase.messaging'
 const URL_ENCODED_CONTENT_TYPE = 'application/x-www-form-urlencoded'
 const CLIENT_CREDENTIALS_GRANT_TYPE = 'client_credentials'
@@ -107,9 +109,12 @@ app.post('/oauth/fcm-token', function (req, resp) {
 
   fcmTokenFactory(serviceAccount, SCOPE)
     .then(fcmCredentials => {
+      const expiresAt = FCM_TOKEN_TTL_SECONDS_OVERRIDE ||
+                        Math.floor((fcmCredentials.expiry_date - Date.now()) / 1000)
+
       return resp.json({
         access_token: fcmCredentials.access_token,
-        expires_in: Math.floor((fcmCredentials.expiry_date - Date.now()) / 1000),
+        expires_in: expiresAt,
         token_type: 'Bearer'
       }).send()
     })

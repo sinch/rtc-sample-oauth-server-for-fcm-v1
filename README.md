@@ -91,9 +91,7 @@ ngrok http http://localhost:1000 --domain=<your-static-domain>.ngrok-free.app
 
 ## 4) Update your FCM configuration to Sinch Dashboard
 
-
-
-### Mapping of placeholders and Sinch Dashbaord fields
+Now you have all information you need to setup your OAuth configuration in [Sinch Dashboard](https://dashboard.sinch.com/voice/apps); select your Sinch app and then the In-app Voice and Video SDK, and fill in the FCM OAuth configuration with the following values:
 
 | Sinch Dashboard field           | Value |
 | ---                             | ---- |
@@ -102,3 +100,15 @@ ngrok http http://localhost:1000 --domain=<your-static-domain>.ngrok-free.app
 | **Scope**                       | `https://www.googleapis.com/auth/firebase.messaging` |
 | **Your Auth server URL**        | `https://\<ngrok-id>.ngrok-free.app/oauth/token` |
 | **Your FCM token endpoint URL** | `https://\<ngrok-id>.ngrok-free.app/oauth/fcm-token` |
+
+## 5) Final test
+
+To verify that everything is setup correctly, you can try to install Sinch's sample app for Android SDK and place a call toward a user registered with the sample app. More specifically:
+
+1. Download Sinch SDK for Android from the [download page](https://developers.sinch.com/docs/in-app-calling/sdk-downloads/)
+1. install `sinch-rtc-sample-push` app on 2 Android devices (or simulators), using Android Studio
+1. register `userA` on one device, and `userB` on the other one
+1. place a call from `userA` to `userB`: Sinch platform will contact your authorization server to get the credentials needed to authorize the push request to FCM; you'll be able to see requests/responses being handled by your authorization servers in the logs of the authorization server
+1. if a push notification reaches `userB`, the test succeeded.
+
+**NOTE**: not every call to an Android device will trigger a request to your authorization server, because Sinch will cache the FCM tokens obtained by your server according to the `expire_at` field returned in the response (default value is 1 hour, see [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/#implementing-the-fcm-token-endpoint) for more details); this will greatly improve the performance of the Sinch platform, but might slow you down in development/integration phase as Sinch will contact your authorization server only after the existing token has expired. To simplify your development/integration, you can manually override the expiry of the FCM token by setting the variable `FCM_TOKEN_TTL_SECONDS_OVERRIDE` in `./src/app.js` to a short TTL (e.g., 30 seconds).
