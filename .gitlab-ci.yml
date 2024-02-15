@@ -22,7 +22,7 @@ cache:
 
 api:test:
   stage: test
-  extend: .node
+  extends: .node
   script:
     - npm run test
 
