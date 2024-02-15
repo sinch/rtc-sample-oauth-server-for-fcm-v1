@@ -4,7 +4,7 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-ARG NODE_VERSION=20.8.0
+ARG NODE_VERSION=21
 
 FROM node:${NODE_VERSION}-alpine
 
@@ -13,6 +13,8 @@ ENV NODE_ENV production
 
 
 WORKDIR /usr/src/app
+
+RUN apk add bash curl jq
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
