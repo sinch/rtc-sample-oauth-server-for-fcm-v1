@@ -50,5 +50,6 @@ docker:endpoints:test:
     AWS_DEFAULT_REGION: eu-central-1
   script:
     - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
+    - cat placeholders/config.json
     - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
     - !reference [.kaniko, script]
