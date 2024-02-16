@@ -6,9 +6,9 @@ This is an implementation of an Authorization server, that can be used to quickl
 
 This authorization server is implemented as a Node application, and makes use of the Google credentials included in a `service-account.json` file to mint short-lived OAuth tokens valid for FCM usage.
 
-For more details on how this authorization servers interacts with Sinch platform, see the [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/) on Sinch website.
+For more details on how this authorization server interacts with Sinch platform, see the [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/) on Sinch website.
 
-To start using this sample and allow Sinch placing calls to Android devices, you essentially have to follow 5 simple steps:
+To start using this sample application and allow Sinch placing calls to Android devices, you essentially have to follow 5 simple steps:
 
 1. provide your OAuth configuration and Google credentials by replacing placeholder values;
 2. execute the authorization server locally on your machine;
@@ -32,12 +32,12 @@ Each of those files includes a detailed explanation on how to fetch the appropri
 
 * in `config.json`:
   * `client_credentials`: `client_id` and `client_secret` that Sinch will use to authenticate against your Authorization server
-    * if you haven't provided any OAuth configuration to Sinch via [Sinch Dashboard](https://dashboard.sinch.com/voice/apps), `client_id` and `client_secret` are arbitrary strings;
+    * if you haven't provided any OAuth configuration to Sinch via [Sinch Dashboard](https://dashboard.sinch.com/voice/apps), `client_id` and `client_secret` can be any arbitrary strings;
     * if you have already provided an OAuth configuration to Sinch via [Sinch Dashboard](https://dashboard.sinch.com/voice/apps), `client_id` and `client_secret` in `placeholders/config.json` have to match "Client ID" and "Client Secret" in the Dashboard
   * `fcm_config`: the "Project Number" of the FCM project used in your Android app (available in the "FCM Console" of your FCM project)
 * `service-account.json`: a `service-account.json` downloaded from the FCM console of the FCM project used in your app.
 
-**NOTE**: you won't be able to successfully start the authorization server if all placeholders haven't been replaced.
+**NOTE**: you won't be able to successfully start the authorization server until all placeholders have been replaced.
 
 ## 2) Execute the authorization server on your machine
 
@@ -45,14 +45,16 @@ The authorization server is a Node application, and can be executed directly via
 
 To execute the authorization server via `npm`:
 
+* install `node` and `npm` on your system, if you haven't already (see [installation guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
 * `npm install`
 * `npm run start`
 
 To execute the authorization server as a Docker container:
 
+* install `docker` if you haven't already (see [download page](https://docs.docker.com/engine/install/))
 * `docker compose up --build`
 
-To verify the application is running as expected, you can run `./test-endpoints-locally.sh`.
+To verify the application is running as expected, you can run `./test-endpoints-locally.sh` when the application is running, and check the console logs.
 
 ## 3) Make your application public on the internet
 
@@ -111,4 +113,8 @@ To verify that everything is setup correctly, you can try to install Sinch's sam
 1. place a call from `userA` to `userB`: Sinch platform will contact your authorization server to get the credentials needed to authorize the push request to FCM; you'll be able to see requests/responses being handled by your authorization servers in the logs of the authorization server
 1. if a push notification reaches `userB`, the test succeeded.
 
-**NOTE**: not every call to an Android device will trigger a request to your authorization server, because Sinch will cache the FCM tokens obtained by your server according to the `expire_at` field returned in the response (default value is 1 hour, see [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/#implementing-the-fcm-token-endpoint) for more details); this will greatly improve the performance of the Sinch platform, but might slow you down in development/integration phase as Sinch will contact your authorization server only after the existing token has expired. To simplify your development/integration, you can manually override the expiry of the FCM token by setting the variable `FCM_TOKEN_TTL_SECONDS_OVERRIDE` in `./src/app.js` to a short TTL (e.g., 30 seconds).
+**NOTE**: not every call to an Android device will trigger a request to your authorization server, because Sinch will cache the FCM tokens obtained by your server according to the `expire_at` field returned in the response (default value is 1 hour, see [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/#implementing-the-fcm-token-endpoint) for more details)
+
+This will greatly improve the performance of the Sinch platform, but might slow you down in development/integration phase as Sinch will contact your authorization server only after the existing token has expired.
+
+To simplify your development/integration, you can manually override the expiry of the FCM token by setting the variable `FCM_TOKEN_TTL_SECONDS_OVERRIDE` in `./src/app.js` to a short TTL (e.g., 30 seconds).
