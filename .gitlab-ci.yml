@@ -3,6 +3,9 @@ include:
     ref: main
     file: "/jobs/_jobs.yml"
 
+default:
+  tags: [rtc]
+
 stages:
   # - lint
   - test
