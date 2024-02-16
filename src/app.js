@@ -16,6 +16,11 @@ const appConfig = require('../placeholders/config.json')
 const serviceAccount = require('../placeholders/service-account.json')
 verifyPlaceholdersWereRemoved()
 
+console.log('Remember that storing a private key (service-account.json) in plain text is a bad' +
+            'security practice and is only suitable for this sample implementation; the ' +
+            'implementation should be changed to store it securely in case you want to deploy it ' +
+            'to production.\n')
+
 // Support application/x-www-form-urlencoded type.
 app.use(express.urlencoded({ extended: true, parameterLimit: 10 }))
 

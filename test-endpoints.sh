@@ -47,6 +47,8 @@ CLIENT_ID=$(jq -r '.client_credentials.client_id' placeholders/config.json)
 CLIENT_SECRET=$(jq -r '.client_credentials.client_secret' placeholders/config.json)
 FCM_PROJECT_NUMBER=$(jq -r '.fcm_config.expected_fcm_project_number' placeholders/config.json)
 
+echo "Fetching access token..."
+
 ACCESS_TOKEN=$(curl -f --request POST \
   --url "${SERVICE_URL}/oauth/token" \
   --header 'Content-Type: application/x-www-form-urlencoded' \
@@ -54,6 +56,8 @@ ACCESS_TOKEN=$(curl -f --request POST \
   --data "client_id=$CLIENT_ID" \
   --data "client_secret=$CLIENT_SECRET" \
   --data "scope=https://www.googleapis.com/auth/firebase.messaging" | jq -r '.access_token')
+
+echo "Fetching FCM token..."
 
 FCM_TOKEN=$(curl -f --request POST \
   --url "${SERVICE_URL}/oauth/fcm-token" \
