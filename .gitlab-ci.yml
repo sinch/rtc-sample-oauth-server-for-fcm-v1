@@ -40,6 +40,11 @@ placeholders:test:
 docker:endpoints:test:
   stage: test
   extends: .kaniko
+  variables:
+    IMAGE: "sample-oauth-server-for-fcm-v1"
+    REPOSITORY: "098456509636.dkr.ecr.eu-central-1.amazonaws.com"
+    AWS_ECR_URL: "098456509636.dkr.ecr.eu-central-1.amazonaws.com"
+    AWS_DEFAULT_REGION: eu-central-1
   script:
     - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
     - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
