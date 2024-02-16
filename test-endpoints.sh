@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+if [ "$#" -gt 1 ] ; then
+    echo "Illegal number of parameters, expected usage: ./test-endpoints.sh [service-url]"
+    echo "Parameter 'service-url' will default to 'localhost:1000' if missing."
+    exit 1
+fi
+
 _fail_if_command_unavailable() {
     if ! command -v $1 &> /dev/null; then
         echo "Error: this script requires the following command: $1"
@@ -11,7 +17,7 @@ _fail_if_command_unavailable() {
 
 function _ensure_service_up()
 {
-    local url="http://localhost:1000/ping"
+    local url="${SERVICE_URL}/ping"
     local timeout_s=30
     local end_at_s=$(( $(date +%s) + $timeout_s ))
 
@@ -28,9 +34,11 @@ function _ensure_service_up()
     exit 1
 }
 
+
 _fail_if_command_unavailable "jq"
 _fail_if_command_unavailable "curl"
 
+SERVICE_URL=${1:-localhost:1000}
 _ensure_service_up
 
 echo "Starting test, will try to contact the authorization server for max 30s..."
@@ -39,17 +47,16 @@ CLIENT_ID=$(jq -r '.client_credentials.client_id' placeholders/config.json)
 CLIENT_SECRET=$(jq -r '.client_credentials.client_secret' placeholders/config.json)
 FCM_PROJECT_NUMBER=$(jq -r '.fcm_config.expected_fcm_project_number' placeholders/config.json)
 
-
-ACCESS_TOKEN=$(curl -s --request POST \
-  --url 'http://localhost:1000/oauth/token' \
+ACCESS_TOKEN=$(curl -f --request POST \
+  --url "${SERVICE_URL}/oauth/token" \
   --header 'Content-Type: application/x-www-form-urlencoded' \
   --data grant_type=client_credentials \
   --data "client_id=$CLIENT_ID" \
   --data "client_secret=$CLIENT_SECRET" \
   --data "scope=https://www.googleapis.com/auth/firebase.messaging" | jq -r '.access_token')
 
-FCM_TOKEN=$(curl -s --request POST \
-  --url 'http://localhost:1000/oauth/fcm-token' \
+FCM_TOKEN=$(curl -f --request POST \
+  --url "${SERVICE_URL}/oauth/fcm-token" \
   --header "Authorization: Bearer $ACCESS_TOKEN" \
   --header 'Content-Type: application/x-www-form-urlencoded' \
   --data "fcm_project_number=$FCM_PROJECT_NUMBER" \

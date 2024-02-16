@@ -54,7 +54,7 @@ To execute the authorization server as a Docker container:
 * install `docker` if you haven't already (see [download page](https://docs.docker.com/engine/install/))
 * `docker compose up --build`
 
-To verify the application is running as expected, you can run `./test-endpoints-locally.sh` when the application is running, and check the console logs.
+To verify the application is running as expected, you can run `./test-endpoints.sh` when the application is running, and check the console logs.
 
 ## 3) Make your application public on the internet
 
