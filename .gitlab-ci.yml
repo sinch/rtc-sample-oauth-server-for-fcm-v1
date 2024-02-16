@@ -18,7 +18,7 @@ cache:
   before_script:
     - npm install
     - apk add bash curl jq
-  image: node:21-alpine
+  image: public.ecr.aws/docker/library/node:21-alpine
   tags: [rtc]
 
 # lint:

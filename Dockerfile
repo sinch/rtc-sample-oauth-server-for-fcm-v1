@@ -6,7 +6,7 @@
 
 ARG NODE_VERSION=21
 
-FROM node:${NODE_VERSION}-alpine
+FROM public.ecr.aws/docker/library/node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
 ENV NODE_ENV production
