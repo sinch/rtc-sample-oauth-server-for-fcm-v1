@@ -6,7 +6,7 @@ This is an implementation of an Authorization server, that can be used to quickl
 
 This authorization server is implemented as a Node application, and makes use of the Google credentials included in a `service-account.json` file to mint short-lived OAuth tokens valid for FCM usage. You can find details on how this authorization server interacts with Sinch platform in the [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/) on Sinch website.
 
-> ⚠️ **NOTE**:
+> ⚠️ **NOTE**
 >
 > This authorization server uses a private key for Google API included in a `service-account.json` file; this is just a way to get you started quickly, but storing private keys in plain text is a poor security practice, and you should instead store them securely if you're planning to use this application in production.
 
@@ -45,7 +45,7 @@ Each of those files includes a detailed explanation on how to fetch the appropri
   * `fcm_config`: the "Project Number" of the FCM project used in your Android app (available in the "FCM Console" of your FCM project)
 * `service-account.json`: a `service-account.json` downloaded from the FCM console of the FCM project used in your app.
 
-> ⚠️ **NOTE**:
+> ⚠️ **NOTE**
 >
 > You won't be able to successfully start the authorization server until all placeholders have been replaced.
 
@@ -95,7 +95,7 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
 
 As long as both `ngrok` and the authorization server are running, your authorization server will be available publicly on the internet at the `*.ngrok-free.dev` address shown in the console. You can verify that by visiting `https://your-ngrok-url.ngrok-free.dev/ping` in your browser.
 
-> ⚠️ **NOTE**:
+> ⚠️ **NOTE**
 >
 > The `*.ngrok-free.dev` URL will change everytime `ngrok` is restarted, which might be inconvenient; you can setup your [ngrok free static domain](https://ngrok.com/blog-post/free-static-domains-ngrok-users) to always obtain the same URL.
 
@@ -127,7 +127,7 @@ To verify that everything is setup correctly, you can try to install Sinch's sam
 1. place a call from `userA` to `userB`: Sinch platform will contact your authorization server to get the credentials needed to authorize the push request to FCM; you'll be able to see requests/responses being handled by your authorization servers in the logs of the authorization server
 1. if a push notification reaches `userB`, the test succeeded.
 
-> ⚠️ **NOTE**:
+> ⚠️ **NOTE**
 >
 > Not every call to an Android device will trigger a request to your authorization server, because Sinch will cache the FCM tokens obtained by your server according to the `expire_at` field returned in the response (default value is 1 hour, see [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/#implementing-the-fcm-token-endpoint) for more details)
 >
