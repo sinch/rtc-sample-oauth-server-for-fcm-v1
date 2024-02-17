@@ -4,13 +4,17 @@ This is an implementation of an Authorization server, that can be used to quickl
 
 ## Overview
 
-This authorization server is implemented as a Node application, and makes use of the Google credentials included in a `service-account.json` file to mint short-lived OAuth tokens valid for FCM usage.
+This authorization server is implemented as a Node application, and makes use of the Google credentials included in a `service-account.json` file to mint short-lived OAuth tokens valid for FCM usage. You can find details on how this authorization server interacts with Sinch platform in the [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/) on Sinch website.
 
 > ⚠️ **NOTE**:
 >
 > This authorization server uses a private key for Google API included in a `service-account.json` file; this is just a way to get you started quickly, but storing private keys in plain text is a poor security practice, and you should instead store them securely if you're planning to use this application in production.
 
-For more details on how this authorization server interacts with Sinch platform, see the [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/) on Sinch website.
+ This application exposes 3 HTTP endpoints:
+
+* `POST /oauth/token`: the "authorization server" described in [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/);
+* `POST /oauth/fcm-token`: the "resource server" or "FCM tokens endpoint" described in [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/);
+* `GET /ping`: returns 200OK unconditionally, can be used to verify that the service is up and running.
 
 To start using this sample application and allow Sinch placing calls to Android devices, you essentially have to follow 5 simple steps:
 
