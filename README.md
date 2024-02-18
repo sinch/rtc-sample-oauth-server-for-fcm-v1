@@ -131,6 +131,6 @@ To verify that everything is setup correctly, you can try to install Sinch's sam
 >
 > Not every call to an Android device will trigger a request to your authorization server, because Sinch will cache the FCM tokens obtained by your server according to the `expire_at` field returned in the response (default value is 1 hour, see [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/#implementing-the-fcm-token-endpoint) for more details)
 >
-> This will greatly improve the performance of the Sinch platform, but might slow you down in development/integration phase as Sinch will contact your authorization server only after the existing token has expired.
+> This will greatly improve the performance of the Sinch platform and reduce the load on your application, but might slow you down in development/integration phase as Sinch will contact your authorization server only after the existing token has expired.
 >
 > To simplify your development/integration, you can manually override the expiry of the FCM token by setting the variable `FCM_TOKEN_TTL_SECONDS_OVERRIDE` in `./src/app.js` to a short TTL (e.g., 30 seconds).
