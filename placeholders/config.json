@@ -1,32 +1,27 @@
 {
-    "client_credentials":
-    {
-        "description":
-        [
-            "Replace placeholders with the 'Client Credentials' (client_id, client_secret) that will be used by Sinch in the OAuth",
-            "flow; they are arbitrary strings, but they have to match the credentials you configured (or will configure)",
-            "as 'FCM Identification' in Sinch Dashboard.",
-            "You can check your Sinch's app configuration at https://dashboard.sinch.com/voice/apps",
-            "",
-            "NOTE: these values are NOT the same as 'applicationKey' and 'applicationSecret'; check the 'FCM Identification'",
-            "section in Sinch Dashboard."
-        ],
-        "client_id": "<PLACEHOLDER>",
-        "client_secret": "<PLACEHOLDER>"
-    },
-    "fcm_config":
-    {
-        "description":
-        [
-            "Replace placeholders with the 'Project number' of your Android app's FCM project.",
-            "It's needed to validate the 'fcm_project_number' field in your FCM token endpoint.",
-            "You can find the 'Project number' for your FCM project at:",
-            "https://console.firebase.google.com/u/0/project/<your-fcm-project-id>/settings/general",
-            "",
-            "NOTE: 'Project number' != 'Project ID'; both are unique identifiers of your FCM project, but 'Project number'",
-            "has a numeric value while 'Project ID' is an arbitrary string."
-        ],
-        "expected_fcm_project_number": "<PLACEHOLDER>"
-    }
-
+  "client_credentials": {
+    "description": [
+      "Replace placeholders with the 'Client Credentials' (client_id, client_secret) that will be used by Sinch in the OAuth",
+      "flow; they are arbitrary strings, but they have to match the credentials you configured (or will configure)",
+      "as 'FCM Identification' in Sinch Dashboard.",
+      "You can check your Sinch's app configuration at https://dashboard.sinch.com/voice/apps",
+      "",
+      "NOTE: these values are NOT the same as 'applicationKey' and 'applicationSecret'; check the 'FCM Identification'",
+      "section in Sinch Dashboard."
+    ],
+    "client_id": "<PLACEHOLDER>",
+    "client_secret": "<PLACEHOLDER>"
+  },
+  "fcm_config": {
+    "description": [
+      "Replace placeholders with the 'Project number' of your Android app's FCM project.",
+      "It's needed to validate the 'fcm_project_number' field in your FCM token endpoint.",
+      "You can find the 'Project number' for your FCM project at:",
+      "https://console.firebase.google.com/u/0/project/<your-fcm-project-id>/settings/general",
+      "",
+      "NOTE: 'Project number' != 'Project ID'; both are unique identifiers of your FCM project, but 'Project number'",
+      "has a numeric value while 'Project ID' is an arbitrary string."
+    ],
+    "expected_fcm_project_number": "<PLACEHOLDER>"
+  }
 }

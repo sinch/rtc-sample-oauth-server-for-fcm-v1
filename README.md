@@ -12,11 +12,11 @@ This authorization server is implemented as a Node application, and makes use of
 >
 > This authorization server uses a private key for Google API included in a `service-account.json` file; this is just a way to get you started quickly, but storing private keys in plain text is a poor security practice, and you should instead store them securely if you're planning to use this application in production.
 
- This application exposes 3 HTTP endpoints:
+This application exposes 3 HTTP endpoints:
 
-* `POST /oauth/token`: the "authorization server" described in [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/);
-* `POST /oauth/fcm-token`: the "resource server" or "FCM tokens endpoint" described in [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/);
-* `GET /ping`: returns 200OK unconditionally, can be used to verify that the service is up and running.
+- `POST /oauth/token`: the "authorization server" described in [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/);
+- `POST /oauth/fcm-token`: the "resource server" or "FCM tokens endpoint" described in [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/);
+- `GET /ping`: returns 200OK unconditionally, can be used to verify that the service is up and running.
 
 To start using this sample application and allow Sinch placing calls to Android devices, you essentially have to follow 5 simple steps:
 
@@ -28,7 +28,7 @@ To start using this sample application and allow Sinch placing calls to Android 
 
 ## 1) Placeholders replacement
 
-To be able to start using  this implementation of an Autorization server, you have to first replace some placeholders with appropriate values.
+To be able to start using this implementation of an Autorization server, you have to first replace some placeholders with appropriate values.
 
 You can find those placeholders in `./placeholders/*.json` files:
 
@@ -40,12 +40,12 @@ You can find those placeholders in `./placeholders/*.json` files:
 
 Each of those files includes a detailed explanation on how to fetch the appropriate values for each placeholder; as a summary, the values to be replaced are:
 
-* in `config.json`:
-  * `client_credentials`: `client_id` and `client_secret` that Sinch will use to authenticate against your Authorization server
-    * if you haven't provided any OAuth configuration to Sinch via [Sinch Dashboard](https://dashboard.sinch.com/voice/apps), `client_id` and `client_secret` can be any arbitrary strings;
-    * if you have already provided an OAuth configuration to Sinch via [Sinch Dashboard](https://dashboard.sinch.com/voice/apps), `client_id` and `client_secret` in `placeholders/config.json` have to match "Client ID" and "Client Secret" in the Dashboard
-  * `fcm_config`: the "Project Number" of the FCM project used in your Android app (available in the "FCM Console" of your FCM project)
-* `service-account.json`: a `service-account.json` downloaded from the FCM console of the FCM project used in your app.
+- in `config.json`:
+  - `client_credentials`: `client_id` and `client_secret` that Sinch will use to authenticate against your Authorization server
+    - if you haven't provided any OAuth configuration to Sinch via [Sinch Dashboard](https://dashboard.sinch.com/voice/apps), `client_id` and `client_secret` can be any arbitrary strings;
+    - if you have already provided an OAuth configuration to Sinch via [Sinch Dashboard](https://dashboard.sinch.com/voice/apps), `client_id` and `client_secret` in `placeholders/config.json` have to match "Client ID" and "Client Secret" in the Dashboard
+  - `fcm_config`: the "Project Number" of the FCM project used in your Android app (available in the "FCM Console" of your FCM project)
+- `service-account.json`: a `service-account.json` downloaded from the FCM console of the FCM project used in your app.
 
 > ⚠️ **NOTE**
 >
@@ -57,14 +57,14 @@ The authorization server is a Node application, and can be executed directly via
 
 To execute the authorization server via `npm`:
 
-* install `node` and `npm` on your system, if you haven't already (see [installation guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
-* `npm install`
-* `npm run start`
+- install `node` and `npm` on your system, if you haven't already (see [installation guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
+- `npm install`
+- `npm run start`
 
 To execute the authorization server as a Docker container:
 
-* install `docker` if you haven't already (see [download page](https://docs.docker.com/engine/install/))
-* `docker compose up --build`
+- install `docker` if you haven't already (see [download page](https://docs.docker.com/engine/install/))
+- `docker compose up --build`
 
 To verify the application is running as expected, you can run `./test-endpoints.sh` when the application is running, and check the console logs.
 
@@ -111,13 +111,13 @@ ngrok http http://localhost:3000 --domain=<your-static-domain>.ngrok-free.app
 
 Now you have all information you need to setup your OAuth configuration in [Sinch Dashboard](https://dashboard.sinch.com/voice/apps); select your Sinch app and then the In-app Voice and Video SDK, and fill in the 'FCM Identification' section for your app with the following values:
 
-| Sinch Dashboard field | Value |
-| ---                   | ---- |
-| **Client Id**         | `client_id` from `./placeholers/client-credentials.json` |
+| Sinch Dashboard field | Value                                                        |
+| --------------------- | ------------------------------------------------------------ |
+| **Client Id**         | `client_id` from `./placeholers/client-credentials.json`     |
 | **Client Secret**     | `client_secret` from `./placeholers/client-credentials.json` |
-| **Scope**             | `https://www.googleapis.com/auth/firebase.messaging` |
-| **Access token URL**  | `https://\<ngrok-url>/oauth/token` |
-| **FCM token URL**     | `https://\<ngrok-url>/oauth/fcm-token` |
+| **Scope**             | `https://www.googleapis.com/auth/firebase.messaging`         |
+| **Access token URL**  | `https://\<ngrok-url>/oauth/token`                           |
+| **FCM token URL**     | `https://\<ngrok-url>/oauth/fcm-token`                       |
 
 ## 5) Final test
 

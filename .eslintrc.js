@@ -3,34 +3,30 @@ module.exports = {
     browser: true,
     commonjs: true,
     es2021: true,
-    'jest/globals': true
+    "jest/globals": true,
   },
   extends: [
-    'plugin:editorconfig/all',
-    'standard'
+    "plugin:editorconfig/all",
+    "standard",
+    "plugin:prettier/recommended",
   ],
   overrides: [
     {
       env: {
-        node: true
+        node: true,
       },
-      files: [
-        '.eslintrc.{js,cjs}'
-      ],
+      files: [".eslintrc.{js,cjs}"],
       parserOptions: {
-        sourceType: 'script'
-      }
-    }
+        sourceType: "script",
+      },
+    },
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: "latest",
   },
   rules: {
-    'max-len': ['error', 100, 4],
-    curly: 'error'
+    "max-len": ["error", 100, 4],
+    curly: "error",
   },
-  plugins: [
-    'jest',
-    'editorconfig'
-  ]
-}
+  plugins: ["jest", "editorconfig"],
+};
