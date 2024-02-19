@@ -9,6 +9,7 @@ default:
 stages:
   # - lint
   - test
+  - integration-tests
 
 cache:
   paths:
@@ -53,3 +54,39 @@ docker:endpoints:test:
     - cat placeholders/config.json
     - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
     - !reference [.kaniko, script]
+
+integration-test:
+  stage: integration-tests
+  tags: [rtc]
+  extends: .vcluster
+  variables:
+    TEST_DOMAIN: sample-oauth-server.k8s-cicd.tools.internal.sinch.com
+    IMAGE: "098456509636.dkr.ecr.eu-central-1.amazonaws.com/sample-oauth-server-for-fcm-v1:${CI_COMMIT_SHORT_SHA}"
+  script:
+    - envsubst < integration-tests/deployment.yaml > deployment_temp.yaml
+    - mv deployment_temp.yaml integration-tests/deployment.yaml
+    - kubectl create namespace vcluster
+    - kubectl apply -f integration-tests
+    - kubectl wait --for=condition=available --timeout=120s -n vcluster deployment app
+    - |
+      ATTEMPT_COUNTER=0
+      MAX_ATTEMPTS=10
+      WAIT=5
+      until kubectl get secret tls-internal-wildcard --namespace vcluster; do
+      if [ ${ATTEMPT_COUNTER} -eq ${MAX_ATTEMPTS} ]; then
+          echo "Max attempts reached"
+          exit 1
+      fi
+      printf '.'
+      ATTEMPT_COUNTER=$(($ATTEMPT_COUNTER+1))
+      sleep ${WAIT}
+      done
+      sleep 60 # waiting for the domain to be registered in Route53
+      ip=$(dig +short ${TEST_DOMAIN})
+      if [ -z "$ip" ]; then
+        echo "The domain not found. The job must be interrupted. Please retry the job in a few minutes."
+        exit 1
+      fi
+    - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
+    - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
+    - ./test-endpoints.sh https://sample-oauth-server.k8s-cicd.tools.internal.sinch.com

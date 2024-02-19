@@ -2,24 +2,23 @@
 
 set -euo pipefail
 
-if [ "$#" -gt 1 ] ; then
+if [ "$#" -gt 1 ]; then
     echo "Illegal number of parameters, expected usage: ./test-endpoints.sh [service-url]"
-    echo "Parameter 'service-url' will default to 'localhost:1000' if missing."
+    echo "Parameter 'service-url' will default to 'localhost:3000' if missing."
     exit 1
 fi
 
 _fail_if_command_unavailable() {
-    if ! command -v $1 &> /dev/null; then
+    if ! command -v $1 &>/dev/null; then
         echo "Error: this script requires the following command: $1"
         exit 1
     fi
 }
 
-function _ensure_service_up()
-{
+function _ensure_service_up() {
     local url="${SERVICE_URL}/ping"
     local timeout_s=30
-    local end_at_s=$(( $(date +%s) + $timeout_s ))
+    local end_at_s=$(($(date +%s) + $timeout_s))
 
     while [ $(date +%s) -lt $end_at_s ]; do
         echo "Trying to contact the authorization server..."
@@ -33,7 +32,6 @@ function _ensure_service_up()
     echo "Failed to receive HTTP 200 OK"
     exit 1
 }
-
 
 _fail_if_command_unavailable "jq"
 _fail_if_command_unavailable "curl"
@@ -50,20 +48,20 @@ FCM_PROJECT_NUMBER=$(jq -r '.fcm_config.expected_fcm_project_number' placeholder
 echo "Fetching access token..."
 
 ACCESS_TOKEN=$(curl -f --request POST \
-  --url "${SERVICE_URL}/oauth/token" \
-  --header 'Content-Type: application/x-www-form-urlencoded' \
-  --data grant_type=client_credentials \
-  --data "client_id=$CLIENT_ID" \
-  --data "client_secret=$CLIENT_SECRET" \
-  --data "scope=https://www.googleapis.com/auth/firebase.messaging" | jq -r '.access_token')
+    --url "${SERVICE_URL}/oauth/token" \
+    --header 'Content-Type: application/x-www-form-urlencoded' \
+    --data grant_type=client_credentials \
+    --data "client_id=$CLIENT_ID" \
+    --data "client_secret=$CLIENT_SECRET" \
+    --data "scope=https://www.googleapis.com/auth/firebase.messaging" | jq -r '.access_token')
 
 echo "Fetching FCM token..."
 
 FCM_TOKEN=$(curl -f --request POST \
-  --url "${SERVICE_URL}/oauth/fcm-token" \
-  --header "Authorization: Bearer $ACCESS_TOKEN" \
-  --header 'Content-Type: application/x-www-form-urlencoded' \
-  --data "fcm_project_number=$FCM_PROJECT_NUMBER" \
-  --data grant_type=client_credentials | jq -r '.access_token')
+    --url "${SERVICE_URL}/oauth/fcm-token" \
+    --header "Authorization: Bearer $ACCESS_TOKEN" \
+    --header 'Content-Type: application/x-www-form-urlencoded' \
+    --data "fcm_project_number=$FCM_PROJECT_NUMBER" \
+    --data grant_type=client_credentials | jq -r '.access_token')
 
 echo "Successfully fetched FCM token ($FCM_TOKEN)"
