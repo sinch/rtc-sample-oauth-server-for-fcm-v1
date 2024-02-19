@@ -5,7 +5,10 @@ module.exports = {
     es2021: true,
     'jest/globals': true
   },
-  extends: 'standard',
+  extends: [
+    'plugin:editorconfig/all',
+    'standard'
+  ],
   overrides: [
     {
       env: {
@@ -27,6 +30,7 @@ module.exports = {
     curly: 'error'
   },
   plugins: [
-    'jest'
+    'jest',
+    'editorconfig'
   ]
 }
