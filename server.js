@@ -1,7 +1,7 @@
-const app = require("./src/app.js");
+// const app = require("./src/app.js");
 
-const PORT = 3000;
+// const PORT = 3000;
 
-app.listen(PORT, function () {
-  console.log("Started application on port %d", PORT);
-});
+// app.listen(PORT, function () {
+//   console.log("Started application on port %d", PORT);
+// });
