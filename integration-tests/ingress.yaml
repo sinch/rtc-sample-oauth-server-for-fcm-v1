@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: vcluster
+  name: app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx-internal
+  tls:
+    - hosts:
+        - sample-oauth-server.k8s-cicd.tools.internal.sinch.com
+      # checkov:skip=CKV_SECRET_6
+      secretName: tls-internal-wildcard
+  rules:
+    - host: sample-oauth-server.k8s-cicd.tools.internal.sinch.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-service
+                port:
+                  name: http
