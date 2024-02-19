@@ -23,7 +23,7 @@
             "You can find the 'Project number' for your FCM project at:",
             "https://console.firebase.google.com/u/0/project/<your-fcm-project-id>/settings/general",
             "",
-            "NOTE: 'Project number' != 'Project ID'; both are unique identifiers of your FCM project, but 'Project number' ",
+            "NOTE: 'Project number' != 'Project ID'; both are unique identifiers of your FCM project, but 'Project number'",
             "has a numeric value while 'Project ID' is an arbitrary string."
         ],
         "expected_fcm_project_number": "<PLACEHOLDER>"
