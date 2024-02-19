@@ -1,4 +1,5 @@
 const express = require('express')
+const crypto = require('crypto')
 const fcmTokenFactory = require('./fcmTokenFactory')
 
 const FCM_TOKEN_TTL_SECONDS_OVERRIDE = null
@@ -16,7 +17,7 @@ const appConfig = require('../placeholders/config.json')
 const serviceAccount = require('../placeholders/service-account.json')
 verifyPlaceholdersWereRemoved()
 
-console.log('Remember that storing a private key (service-account.json) in plain text is a bad' +
+console.log('Remember that storing a private key (service-account.json) in plain text is a bad ' +
             'security practice and is only suitable for this sample implementation; the ' +
             'implementation should be changed to store it securely in case you want to deploy it ' +
             'to production.\n')

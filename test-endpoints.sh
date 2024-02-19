@@ -36,7 +36,7 @@ function _ensure_service_up() {
 _fail_if_command_unavailable "jq"
 _fail_if_command_unavailable "curl"
 
-SERVICE_URL=${1:-localhost:1000}
+SERVICE_URL=${1:-localhost:3000}
 _ensure_service_up
 
 echo "Starting test, will try to contact the authorization server for max 30s..."

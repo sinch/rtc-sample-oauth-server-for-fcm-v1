@@ -68,12 +68,12 @@ To verify the application is running as expected, you can run `./test-endpoints.
 
 ## 3) Make your application public on the internet
 
-The authorization server will listen on port `1000`; to make the authorization server reachable from Sinch platform, you can easily expose your local port `1000` to the public internet using the free version of [ngrok](https://ngrok.com/). You can install and setup your `ngrok` installation by following [this short Quickstart guide](https://ngrok.com/docs/getting-started/).
+The authorization server will listen on port `3000`; to make the authorization server reachable from Sinch platform, you can easily expose your local port `3000` to the public internet using the free version of [ngrok](https://ngrok.com/). You can install and setup your `ngrok` installation by following [this short Quickstart guide](https://ngrok.com/docs/getting-started/).
 
 Once you've installed `ngrok` and setup your account, you can run:
 
 ```plain
- ngrok http http://localhost:1000
+ ngrok http http://localhost:3000
 ```
 
 Your console should now look something like:
@@ -102,7 +102,7 @@ As long as both `ngrok` and the authorization server are running, your authoriza
 If you're using static domains, the command to make your application public is:
 
 ```plain
-ngrok http http://localhost:1000 --domain=<your-static-domain>.ngrok-free.app
+ngrok http http://localhost:3000 --domain=<your-static-domain>.ngrok-free.app
 ```
 
 ## 4) Update your FCM configuration to Sinch Dashboard
