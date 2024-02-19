@@ -2,6 +2,8 @@
 
 This is an implementation of an Authorization server, that can be used to quickly get started with FCM push notifications when using Sinch's in-app calling Android SDK.
 
+It has been tested on Node 21.
+
 ## Overview
 
 This authorization server is implemented as a Node application, and makes use of the Google credentials included in a `service-account.json` file to mint short-lived OAuth tokens valid for FCM usage. You can find details on how this authorization server interacts with Sinch platform in the [Guide for migration to FCM v1](https://developers.sinch.com/docs/in-app-calling/android/migration-to-fcm-v1/) on Sinch website.
@@ -93,11 +95,11 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
                               0       0       0.00    0.00    0.00    0.00
 ```
 
-As long as both `ngrok` and the authorization server are running, your authorization server will be available publicly on the internet at the `*.ngrok-free.dev` address shown in the console. You can verify that by visiting `https://your-ngrok-url.ngrok-free.dev/ping` in your browser.
+As long as both `ngrok` and the authorization server are running, your authorization server will be available publicly on the internet at the `*.ngrok-free.*` address shown in the console. You can verify that by visiting `https://<your-ngrok-url>/ping` in your browser.
 
 > ⚠️ **NOTE**
 >
-> The `*.ngrok-free.dev` URL will change everytime `ngrok` is restarted, which might be inconvenient; you can setup your [ngrok free static domain](https://ngrok.com/blog-post/free-static-domains-ngrok-users) to always obtain the same URL.
+> The `*.ngrok-free.*` URL will change everytime `ngrok` is restarted, which might be inconvenient; you can setup your [ngrok free static domain](https://ngrok.com/blog-post/free-static-domains-ngrok-users) to always obtain the same URL.
 
 If you're using static domains, the command to make your application public is:
 
@@ -107,15 +109,15 @@ ngrok http http://localhost:3000 --domain=<your-static-domain>.ngrok-free.app
 
 ## 4) Update your FCM configuration to Sinch Dashboard
 
-Now you have all information you need to setup your OAuth configuration in [Sinch Dashboard](https://dashboard.sinch.com/voice/apps); select your Sinch app and then the In-app Voice and Video SDK, and fill in the FCM OAuth configuration with the following values:
+Now you have all information you need to setup your OAuth configuration in [Sinch Dashboard](https://dashboard.sinch.com/voice/apps); select your Sinch app and then the In-app Voice and Video SDK, and fill in the 'FCM Identification' section for your app with the following values:
 
-| Sinch Dashboard field           | Value |
-| ---                             | ---- |
-| **Client Id**                   | `client_id` from `./placeholers/client-credentials.json` |
-| **Client Secret**               | `client_secret` from `./placeholers/client-credentials.json` |
-| **Scope**                       | `https://www.googleapis.com/auth/firebase.messaging` |
-| **Your Auth server URL**        | `https://\<ngrok-id>.ngrok-free.app/oauth/token` |
-| **Your FCM token endpoint URL** | `https://\<ngrok-id>.ngrok-free.app/oauth/fcm-token` |
+| Sinch Dashboard field | Value |
+| ---                   | ---- |
+| **Client Id**         | `client_id` from `./placeholers/client-credentials.json` |
+| **Client Secret**     | `client_secret` from `./placeholers/client-credentials.json` |
+| **Scope**             | `https://www.googleapis.com/auth/firebase.messaging` |
+| **Access token URL**  | `https://\<ngrok-url>/oauth/token` |
+| **FCM token URL**     | `https://\<ngrok-url>/oauth/fcm-token` |
 
 ## 5) Final test
 
