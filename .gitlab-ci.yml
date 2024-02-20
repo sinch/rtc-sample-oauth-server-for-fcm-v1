@@ -7,58 +7,26 @@ default:
   tags: [rtc]
 
 stages:
-  # - lint
-  - test
+  - lint & test
+  - build
   - integration-tests
 
 cache:
   paths:
     - node_modules/
 
+# Templates
+
 .node:
   before_script:
     - npm install
     - apk add bash curl jq
-  image: public.ecr.aws/docker/library/node:21-alpine
-  tags: [rtc]
+  image: public.ecr.aws/docker/library/node:20-alpine
+  interruptible: true
 
-# lint:
-#   stage: lint
-#   image: node:21-alpine
-#   tags: [rtc]
-#   script:
-#     - npm run lint
-
-api:test:
-  stage: test
-  extends: .node
-  script:
-    - npm run test
-
-placeholders:test:
-  stage: test
-  extends: .node
-  script:
-    - bash -x verify-termination-on-placeholders.sh
-
-docker:endpoints:test:
-  stage: test
-  extends: .kaniko
-  variables:
-    IMAGE: "sample-oauth-server-for-fcm-v1"
-    REPOSITORY: "098456509636.dkr.ecr.eu-central-1.amazonaws.com"
-    AWS_ECR_URL: "098456509636.dkr.ecr.eu-central-1.amazonaws.com"
-    AWS_DEFAULT_REGION: eu-central-1
-  script:
-    - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
-    - cat placeholders/config.json
-    - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
-    - !reference [.kaniko, script]
-
-integration-test:
-  stage: integration-tests
-  tags: [rtc]
+.integration-test:
   extends: .vcluster
+  interruptible: true
   variables:
     TEST_DOMAIN: sample-oauth-server.k8s-cicd.tools.internal.sinch.com
     IMAGE: "098456509636.dkr.ecr.eu-central-1.amazonaws.com/sample-oauth-server-for-fcm-v1:${CI_COMMIT_SHORT_SHA}"
@@ -87,6 +55,52 @@ integration-test:
         echo "The domain not found. The job must be interrupted. Please retry the job in a few minutes."
         exit 1
       fi
+
+# Concrete jobs
+
+lint:
+  stage: lint & test
+  extends: .node
+  script:
+    - npm run lint
+
+audit:
+  stage: lint & test
+  extends: .node
+  script:
+    - npm audit --audit-level=critical
+
+api:test:
+  stage: lint & test
+  extends: .node
+  script:
+    - npm run test
+
+placeholders:test:
+  stage: lint & test
+  extends: .node
+  script:
+    - bash -x verify-termination-on-placeholders.sh
+
+docker:image:build:
+  stage: build
+  extends: .kaniko
+  variables:
+    IMAGE: "sample-oauth-server-for-fcm-v1"
+    REPOSITORY: "098456509636.dkr.ecr.eu-central-1.amazonaws.com"
+    AWS_ECR_URL: "098456509636.dkr.ecr.eu-central-1.amazonaws.com"
+    AWS_DEFAULT_REGION: eu-central-1
+  script:
+    - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
+    - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
+    - !reference [.kaniko, script]
+
+
+integration:test:
+  stage: integration-tests
+  extends: .integration-test
+  script:
+    - !reference [.integration-test, script]
     - echo $CONFIG_JSON_BASE_64 | base64 -d > placeholders/config.json
     - echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > placeholders/service-account.json
     - ./test-endpoints.sh https://sample-oauth-server.k8s-cicd.tools.internal.sinch.com

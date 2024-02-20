@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG NODE_VERSION=21
+ARG NODE_VERSION=20
 
 FROM public.ecr.aws/docker/library/node:${NODE_VERSION}-alpine
 

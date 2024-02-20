@@ -2,7 +2,7 @@
 
 This is an implementation of an Authorization server, that can be used to quickly get started with FCM push notifications when using Sinch's in-app calling Android SDK.
 
-It has been tested on Node 21.
+It has been tested on Node 20.
 
 ## Overview
 

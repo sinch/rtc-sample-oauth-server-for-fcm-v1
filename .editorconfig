@@ -6,19 +6,11 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[{*.yml}]
-indent_size = 2
-
 [{*.json,.node-version,.nvmrc,*.svg}]
 insert_final_newline = false
 
-[{nodemon.json}]
-insert_final_newline = true
-
-# https://superuser.com/questions/249436/file-extension-for-markdown-files/285878#285878
-# [{*.markdown,*.md,*.mdown,*.mkd,*.mkdn,*.text}]
 [{*.md}]
-trim_trailing_whitespace = true # https://stackoverflow.com/editing-help#linebreaks
+trim_trailing_whitespace = false # https://stackoverflow.com/editing-help#linebreaks
 
 [/node_modules/**] # Glob/minimatch pattern to match the "node_modules" directory at the project root
 charset = unset

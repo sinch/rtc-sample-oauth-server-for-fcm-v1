@@ -20,6 +20,11 @@ jest.mock("../src/fcmTokenFactory", () => () => {
   });
 });
 
+// Mock the duration of access tokens, to be able to test token expiry.
+jest.mock("../src/accessTokenTtl", () => ({
+  ACCESS_TOKEN_TTL: 1,
+}));
+
 describe("Early rejected requests", () => {
   test("Contenty type not form-urlencoded gives 400", (done) => {
     [AUTH_SERVER_URL, FCM_TOKENS_URL].forEach((e) => {
@@ -32,13 +37,13 @@ describe("Early rejected requests", () => {
     });
   });
 
-  test("Too many form-urlencoded fields gives 400", (done) => {
-    [AUTH_SERVER_URL, FCM_TOKENS_URL].forEach((e) => {
+  test("Too many form-urlencoded fields gives 400", () => {
+    [AUTH_SERVER_URL, FCM_TOKENS_URL].forEach(async (e) => {
       const tooManyForms = {};
       for (let i = 1; i <= 20; i++) {
         tooManyForms.e = e;
       }
-      sendFormRequest(AUTH_SERVER_URL, tooManyForms, null, 401, done);
+      await sendFormRequest(AUTH_SERVER_URL, tooManyForms, null, 401);
     });
   });
 });
@@ -49,16 +54,16 @@ describe("Invalid clientCredential on authServer endpoint", () => {
     { client_id: "", client_secret: VALID_CLIENT_SECRET },
     { client_id: "🏝️", client_secret: VALID_CLIENT_SECRET },
     { client_secret: VALID_CLIENT_SECRET },
-  ])("Credentials %p gives 401", (credentials, done) => {
-    sendFormRequest(AUTH_SERVER_URL, credentials, null, 401, done);
+  ])("Credentials %p gives 401", async (credentials) => {
+    await sendFormRequest(AUTH_SERVER_URL, credentials, null, 401);
   });
 });
 
 describe("Invalid credentials on FcmTokens endpoint", () => {
   test.each([null, "Bearer invalid-token", "Not Bearer"])(
     "Credentials %p gives 401",
-    (credentials, done) => {
-      sendFormRequest(FCM_TOKENS_URL, {}, credentials, 401, done);
+    async (credentials) => {
+      await sendFormRequest(FCM_TOKENS_URL, {}, credentials, 401);
     },
   );
 });
@@ -73,13 +78,12 @@ describe("Valid clientCredentials, but mandatory fields missing on authServer en
     { scope: "wrong-scope" },
     { scope: VALID_SCOPE },
     { scope: VALID_SCOPE, grant_type: "wrong-grant" },
-  ])("Incomplete request %p gives 400", (requestFields, done) => {
-    sendFormRequest(
+  ])("Incomplete request %p gives 400", async (requestFields) => {
+    await sendFormRequest(
       AUTH_SERVER_URL,
       Object.assign({}, requestFields, validCredentials),
       null,
       400,
-      done,
     );
   });
 });
@@ -87,7 +91,7 @@ describe("Valid clientCredentials, but mandatory fields missing on authServer en
 describe("Valid token from authServer", () => {
   let accessToken;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const validRequest = {
       client_id: VALID_CLIENT_ID,
       client_secret: VALID_CLIENT_SECRET,
@@ -95,7 +99,7 @@ describe("Valid token from authServer", () => {
       grant_type: VALID_GRANT,
     };
     accessToken = (
-      await sendFormRequest(AUTH_SERVER_URL, validRequest, null, 200, null)
+      await sendFormRequest(AUTH_SERVER_URL, validRequest, null, 200)
     ).body;
     validateAccessToken(accessToken);
   });
@@ -110,10 +114,24 @@ describe("Valid token from authServer", () => {
         },
         accessToken.access_token,
         200,
-        null,
       )
     ).body;
     validateAccessToken(fcmToken);
+  });
+
+  test("Expired token gives 401 when trying to get an FCM token", async () => {
+    // Let the token expire.
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    await sendFormRequest(
+      FCM_TOKENS_URL,
+      {
+        grant_type: VALID_GRANT,
+        fcm_project_number: VALID_FCM_PROJECT_NUMBER,
+      },
+      accessToken.access_token,
+      401,
+    );
   });
 
   test.each([
@@ -125,13 +143,12 @@ describe("Valid token from authServer", () => {
     ],
   ])(
     "Request %p to FCM token endpoint gives %p",
-    (body, expectedResult, done) => {
-      sendFormRequest(
+    async (body, expectedResult) => {
+      await sendFormRequest(
         FCM_TOKENS_URL,
         body,
         accessToken.access_token,
         expectedResult,
-        done,
       );
     },
   );
@@ -146,7 +163,6 @@ async function sendFormRequest(
   body,
   bearerToken,
   expectedResponseCode,
-  done,
 ) {
   let req = request(app).post(endpoint);
   if (bearerToken) {
@@ -157,15 +173,12 @@ async function sendFormRequest(
   const response = await req.send(body);
 
   expect(response.statusCode).toBe(expectedResponseCode);
-  if (done) {
-    done();
-  }
   return response;
 }
 
 function validateAccessToken(token) {
   expect(token.access_token).toBeDefined();
   expect(token.access_token).not.toBe("");
-  expect(token.expires_in).toBeGreaterThan(1);
+  expect(token.expires_in).toBeGreaterThanOrEqual(1);
   expect(token.token_type).toEqual("Bearer");
 }

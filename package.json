@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "engines": {
+    "npm": ">=10",
+    "node": ">=20"
+  },
   "scripts": {
     "test": "jest --config __test__/jest.config.json",
     "start": "node server.js",
